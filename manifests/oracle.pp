@@ -75,6 +75,8 @@ define java::oracle (
   $version      = '8',
   $java_se      = 'jdk',
   $oracle_url   = 'http://download.oracle.com/otn-pub/java/jdk/',
+  $release_major,
+  $release_minor,
 ) {
 
   # archive module is used to download the java package
@@ -87,29 +89,37 @@ define java::oracle (
     fail('Java SE must be either jre or jdk.')
   }
 
-  # determine oracle Java major and minor version, and installation path
-  case $version {
-    '6' : {
-      $release_major = '6u45'
-      $release_minor = 'b06'
-      $install_path = "${java_se}1.6.0_45"
+  if !$release_major.blank && !$release_minor.blank
+    if $release_major.include? "u"
+      $install_path = "${java_se}1." + s[0, s.index("u")] + ".0_" + s[s.index("u") + 1, s.length]
+    else
+      $install_path = "${java_se}{release_major}"
+    end
+  else
+    # determine oracle Java major and minor version, and installation path
+    case $version {
+      '6' : {
+        $release_major = '6u45'
+        $release_minor = 'b06'
+        $install_path = "${java_se}1.6.0_45"
+      }
+      '7' : {
+        $release_major = '7u80'
+        $release_minor = 'b15'
+        $install_path = "${java_se}1.7.0_80"
+      }
+      '8' : {
+        $release_major = '8u101'
+        $release_minor = 'b13'
+        $install_path = "${java_se}1.8.0_101"
+      }
+      default : {
+        $release_major = '8u101'
+        $release_minor = 'b13'
+        $install_path = "${java_se}1.8.0_101"
+      }
     }
-    '7' : {
-      $release_major = '7u80'
-      $release_minor = 'b15'
-      $install_path = "${java_se}1.7.0_80"
-    }
-    '8' : {
-      $release_major = '8u101'
-      $release_minor = 'b13'
-      $install_path = "${java_se}1.8.0_101"
-    }
-    default : {
-      $release_major = '8u101'
-      $release_minor = 'b13'
-      $install_path = "${java_se}1.8.0_101"
-    }
-  }
+  end
 
   # determine package type (exe/tar/rpm), destination directory based on OS
   case $::kernel {

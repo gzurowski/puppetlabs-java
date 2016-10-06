@@ -75,8 +75,8 @@ define java::oracle (
   $version       = '8',
   $java_se       = 'jdk',
   $oracle_url    = 'http://download.oracle.com/otn-pub/java/jdk/',
-  $release_major = undef,
-  $release_minor = undef,
+  $version_major = undef,
+  $version_minor = undef,
 ) {
 
   # archive module is used to download the java package
@@ -89,7 +89,9 @@ define java::oracle (
     fail('Java SE must be either jre or jdk.')
   }
 
-  if $release_major and $release_minor {
+  if $version_major and $version_minor {
+    $release_major = $version_major
+    $release_minor = $version_minor
     if $release_major =~ /(\d+)u(\d+)/ {
       $install_path = "${java_se}1.$1.0_$2"
     } else {

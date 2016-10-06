@@ -89,13 +89,13 @@ define java::oracle (
     fail('Java SE must be either jre or jdk.')
   }
 
-  if !$release_major.nil? #&& !$release_major.empty? && !$release_minor.nil? && !$release_minor.empty?
-    if $release_major.include? "u" then
-      $install_path = "${java_se}1." + s[0, s.index("u")] + ".0_" + s[s.index("u") + 1, s.length]
-    else
+  if $release_major and $release_minor {
+    if $release_major =~ /(\d+)u(\d+)/ {
+      $install_path = "${java_se}1.$1.0_$2"
+    } else {
       $install_path = "${java_se}${release_major}"
-    end
-  else
+    }
+  } else {
     # determine oracle Java major and minor version, and installation path
     case $version {
       '6' : {
@@ -119,7 +119,7 @@ define java::oracle (
         $install_path = "${java_se}1.8.0_101"
       }
     }
-  end
+  }
 
   # determine package type (exe/tar/rpm), destination directory based on OS
   case $::kernel {

@@ -71,12 +71,12 @@
 # mike@marseglia.org
 #
 define java::oracle (
-  $ensure       = 'present',
-  $version      = '8',
-  $java_se      = 'jdk',
-  $oracle_url   = 'http://download.oracle.com/otn-pub/java/jdk/',
-  $release_major = nil,
-  $release_minor = nil,
+  $ensure        = 'present',
+  $version       = '8',
+  $java_se       = 'jdk',
+  $oracle_url    = 'http://download.oracle.com/otn-pub/java/jdk/',
+  $release_major = undef,
+  $release_minor = undef,
 ) {
 
   # archive module is used to download the java package

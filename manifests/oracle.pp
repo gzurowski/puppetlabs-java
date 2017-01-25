@@ -85,7 +85,7 @@ define java::oracle (
   $version_major = undef,
   $version_minor = undef,
   $java_se       = 'jdk',
-  $oracle_url    = 'http://download.oracle.com/otn-pub/java/jdk/',
+  $oracle_url    = 'http://download.oracle.com/otn/java/jdk/',
 ) {
 
   # archive module is used to download the java package
